@@ -1,7 +1,7 @@
 PoshRat
 =======
 
-PowerShell Reverse HTTPs Shell
+PowerShell Reverse HTTP(s) Shell
 
 1. Invoke PoshRat.ps1 On An Atacker Controlled Server
 2. To Spawn The Reverse Shell Run On Client
