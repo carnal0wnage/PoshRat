@@ -178,6 +178,7 @@ while ($true) {
 			Base64 Encode Your .hta file.
 			$Content = Get-Content -Path C:\Tools\app.hta -Encoding Byte
 			$Base64 = [System.Convert]::ToBase64String($Content)
+			$Base64 | Out-File c:\Tools\encoded.txt
 			HTA Content:
 			<html>
 		  <head>
